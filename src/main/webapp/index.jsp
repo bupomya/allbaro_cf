@@ -7,6 +7,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-6512561156561615
+	<form action="AllbaroExcelServlet" method  ="post" enctype = "multipart/form-data" class = "allbaroExcel">
+		<input type = "file" id = "excel"  accept = ".xls,.xlsx" name = "excel" multiple>
+		<input type = "submit" value = "보내기">
+	</form>
 </body>
 </html>
