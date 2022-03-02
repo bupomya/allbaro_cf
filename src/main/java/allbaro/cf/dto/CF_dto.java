@@ -5,19 +5,21 @@ public class CF_dto {
 	private String inDate;  // 인수 일자
 	private String outDate; // 재활용 일자
 	private String kinds;	// 폐기물 종류
+	private String kindCode;
 	private String companyNo;// 위탁업체 식별번호
 	private String companyName;// 위탁업소
 	private int inAmount;// 수집량
 	private int outAmount;// 재활용량
 	private String code; //인계서 일련번호
 
-	public CF_dto(String inDate, String outDate, String kinds, String companyNo, String companyName, int inAmount,
+	public CF_dto(String inDate, String outDate, String kinds,String kindCode, String companyNo, String companyName, int inAmount,
 			int outAmount, String code) {
 
 		super();
 		this.inDate = inDate;
 		this.outDate = outDate;
 		this.kinds = kinds;
+		this.kindCode = kindCode;
 		this.companyNo = companyNo;
 		this.companyName = companyName;
 		this.inAmount = inAmount;

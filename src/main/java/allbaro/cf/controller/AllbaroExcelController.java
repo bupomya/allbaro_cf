@@ -8,15 +8,65 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.json.simple.JSONArray;
+
+import allbaro.cf.dto.CF_dto;
 
 public class AllbaroExcelController {
-
+	CF_dto tmp = new CF_dto("2021-10-12","2021-10-12","종류1","123123","112233445","A company",50,50,"11223344");
 	// 경로에 있는 엑셀 파일 읽어오기
-	public void readExcel(String dir) {
-		String fileName = "testExcel.xlsx";
+	public JSONArray readExcel(MultipartFile excelFile) {
+        JSONArray jsonArray = new JSONArray();
+        
+        try{
+            XSSFWorkbook workbook = new XSSFWorkbook(excelFile.getInputStream());
+            XSSFSheet sheet;
+            XSSFRow curRow;
+            XSSFCell curCell;
+            
+            /////////첫번째 시트 읽기
+            sheet = workbook.getSheetAt(0);
+            
+            /////////행의 개수 
+            int rownum = sheet.getLastRowNum();
+            
+            /////////첫 행은 컬럼명이므로 두번째 행인 index1부터 읽기
+            for(int rowIndex=1;rowIndex<=rownum;rowIndex++){
+            
+                /////////현재 index의 행 읽기
+                curRow = sheet.getRow(rowIndex);
+                
+                /////////현재 행의 cell 개수
+                int cellnum = curRow.getLastCellNum();
+                
+                /////////엑셀 데이터를 넣을 json object
+                JSONObject data = new JSONObject();
+                
+                for(int cellIndex =0; cellIndex<cellnum;cellIndex++){
+                    System.out.println(rowIndex+"행 "+cellIndex+"열의 값 : " + curRow.getCell(cellIndex));
+                    switch(cellIndex){
+                        case 0 : {    /////////첫번째 열 값
+                            data.put("번호",curRow.getCell(cellIndex).getStringCellValue());
+                        };break;
+                        case 1 : {    /////////두번째 열 값
+                            data.put("이름",curRow.getCell(cellIndex).getStringCellValue());
+                        };break;
+                        case 2 : {    /////////세번째 열 값
+                            data.put("주소",curRow.getCell(cellIndex).getStringCellValue());
+                        }break;
+                    }
+                }
 
-	}// readExcel
-
+                jsonArray.add(data);
+            }
+            return jsonArray;
+        }catch(Exception e){
+            System.out.println("ERROR : "  + e);
+            return jsonArray;
+        }
+    }
+	
+	
 	public void writeHeader() {
 		
 	}//writeHeader
