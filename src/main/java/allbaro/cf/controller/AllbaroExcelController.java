@@ -90,13 +90,14 @@ public class AllbaroExcelController {
 		
 		
 		xssfRow = xssfSheet.createRow(rowNo++);
+		xssfCell = xssfRow.createCell((short) 0);
 		xssfSheet.addMergedRegion(new CellRangeAddress(1, 1, 1, 13));
-		xssfCell = xssfRow.getCell(1);
+//		xssfCell = xssfRow.getCell(1);
 		xssfCell.setCellValue("폐기물 수탁 재활용 관리대장");
 		
-		xssfSheet.addMergedRegion(new CellRangeAddress(2, 2, 2, 13));
 		xssfRow = xssfSheet.createRow(rowNo++);
-
+		xssfCell = xssfRow.createCell((short) 0);
+		xssfSheet.addMergedRegion(new CellRangeAddress(2, 2, 2, 13));
 		xssfCell.setCellValue("(재활용대상 폐기물의 종류:)(단위: 톤)");
 		
 		
@@ -106,7 +107,7 @@ public class AllbaroExcelController {
 		xssfCell.setCellValue(year);
 		
 		xssfCell = xssfRow.createCell((short) 1);
-		xssfSheet.addMergedRegion(new CellRangeAddress(3, 1, 3, 2));
+		xssfSheet.addMergedRegion(new CellRangeAddress(3, 3, 1, 2));
 		xssfCell.setCellValue("수집ㆍ운반내용");
 		
 		xssfCell = xssfRow.createCell((short) 3);
@@ -117,11 +118,11 @@ public class AllbaroExcelController {
 		xssfCell.setCellValue("수탁"); // "수탁" 폐기물 보관량
 		
 		xssfCell = xssfRow.createCell((short)7);
-		xssfSheet.addMergedRegion(new CellRangeAddress(3, 7, 3, 12));
+		xssfSheet.addMergedRegion(new CellRangeAddress(3, 3, 7, 12));
 		xssfCell.setCellValue("재활용제품의 공급 및 보관내용");
 		
 		xssfCell = xssfRow.createCell((short)13);
-		xssfSheet.addMergedRegion(new CellRangeAddress(3, 13, 5, 13));
+		xssfSheet.addMergedRegion(new CellRangeAddress(3, 5, 13, 13));
 		xssfCell.setCellValue("결재");
 		
 		
@@ -129,7 +130,7 @@ public class AllbaroExcelController {
 		//month
 		xssfRow = xssfSheet.createRow(rowNo++);
 		xssfCell = xssfRow.createCell((short)0);
-		xssfSheet.addMergedRegion(new CellRangeAddress(4,0,5,0));
+		xssfSheet.addMergedRegion(new CellRangeAddress(4,5,0,0));
 		xssfCell.setCellValue(month);
 		
 		
@@ -137,7 +138,7 @@ public class AllbaroExcelController {
 		xssfCell.setCellValue("수집");
 		
 		xssfCell = xssfRow.createCell((short)2);
-		xssfSheet.addMergedRegion(new CellRangeAddress(4,2,5,2));
+		xssfSheet.addMergedRegion(new CellRangeAddress(4,5,2,2));
 		xssfCell.setCellValue("수집량");
 		
 		xssfCell = xssfRow.createCell((short)3);
@@ -151,15 +152,15 @@ public class AllbaroExcelController {
 		xssfCell.setCellValue("폐기물");// 수탁 "폐기물" 보관량
 		
 		xssfCell = xssfRow.createCell((short)7);
-		xssfSheet.addMergedRegion(new CellRangeAddress(4,7,4,10));
+		xssfSheet.addMergedRegion(new CellRangeAddress(4,4,7,10));
 		xssfCell.setCellValue("공급처");
 		
 		xssfCell = xssfRow.createCell((short)11);
-		xssfSheet.addMergedRegion(new CellRangeAddress(4,11,5,11));
+		xssfSheet.addMergedRegion(new CellRangeAddress(4,5,11,11));
 		xssfCell.setCellValue("공급량");
 		
 		xssfCell = xssfRow.createCell((short)12);
-		xssfSheet.addMergedRegion(new CellRangeAddress(4,12,5,12));
+		xssfSheet.addMergedRegion(new CellRangeAddress(4,5,12,12));
 		xssfCell.setCellValue("보관량");
 		
 		
@@ -183,7 +184,7 @@ public class AllbaroExcelController {
 		xssfCell.setCellValue("상호(대표자)");
 		
 		xssfCell = xssfRow.createCell((short)8);
-		xssfSheet.addMergedRegion(new CellRangeAddress(5,8,5,9));
+		xssfSheet.addMergedRegion(new CellRangeAddress(5,5,8,9));
 		xssfCell.setCellValue("소재지");
 		
 		xssfCell = xssfRow.createCell((short)10);
@@ -198,7 +199,7 @@ public class AllbaroExcelController {
 		XSSFSheet sheet = workbook.createSheet("아무거나1");
 		XSSFRow curRow = sheet.createRow(0);
 		XSSFCell cell = curRow.createCell(0);
-		cell.setCellValue("데이터");
+//		cell.setCellValue("데이터");
 
 		workbook.write(new FileOutputStream(path+"/"+fileName));
 		workbook = new XSSFWorkbook(path+"/"+fileName);
