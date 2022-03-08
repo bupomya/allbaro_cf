@@ -236,7 +236,8 @@ public class AllbaroExcelController {
 //                            break;
 //                        case XSSFCell.CELL_TYPE_STRING:
 //                            value=cell.getStringCellValue()+"";
-//                            break;
+//         
+                    	break;
 //                        case XSSFCell.CELL_TYPE_BLANK:
 //                            value=cell.getBooleanCellValue()+"";
 //                            break;
