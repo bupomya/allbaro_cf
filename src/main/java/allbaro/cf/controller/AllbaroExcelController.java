@@ -98,13 +98,13 @@ public class AllbaroExcelController {
 
 		xssfRow = xssfSheet.createRow(rowNo++);
 		xssfCell = xssfRow.createCell((short) 0);
-		xssfSheet.addMergedRegion(new CellRangeAddress(1, 1, 1, 13));
+		xssfSheet.addMergedRegion(new CellRangeAddress(1, 1, 0, 13));
 //		xssfCell = xssfRow.getCell(1);
 		xssfCell.setCellValue("폐기물 수탁 재활용 관리대장");
 
 		xssfRow = xssfSheet.createRow(rowNo++);
 		xssfCell = xssfRow.createCell((short) 0);
-		xssfSheet.addMergedRegion(new CellRangeAddress(2, 2, 2, 13));
+		xssfSheet.addMergedRegion(new CellRangeAddress(2, 2, 0, 13));
 		xssfCell.setCellValue("(재활용대상 폐기물의 종류:)(단위: 톤)");
 
 		// year
