@@ -78,7 +78,6 @@ public class AllbaroExcelController {
 
 		int rowNo = 0;
 		
-		
 		xssfRow = xssfSheet.createRow(rowNo++); // 행 객체 추가
 		xssfCell = xssfRow.createCell((short) 0); // 추가한 행에 셀 객체 추가
 		xssfSheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 8)); // 첫행, 마지막행,첫열,마지막열
