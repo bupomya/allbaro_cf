@@ -3,7 +3,11 @@ package allbaro.cf.controller;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -13,7 +17,67 @@ import org.json.simple.JSONArray;
 import allbaro.cf.dto.CF_dto;
 
 public class AllbaroExcelController {
-	CF_dto tmp = new CF_dto("2021-10-12","2021-10-12","종류1","123123","112233445","A company",50,50,"11223344");
+	
+	//추후 수정
+	public void writeDoc() {
+		String tmpDate = "10월";
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		
+		//tmpDate로 빈 시트생성
+		XSSFSheet sheet = workbook.createSheet(tmpDate);
+		//data담을 곳
+		 Map<String, CF_dto[]> data = makeDummy();
+		
+		int rownum = 0;
+        for (String key : data)
+        {
+            Row row = sheet.createRow(rownum++);
+            CF_dto [] objArr = data.get(key);
+            int cellnum = 0;
+            for (Object obj : objArr)
+            {
+               Cell cell = row.createCell(cellnum++);
+               if(obj instanceof String)
+                    cell.setCellValue((String)obj);
+                else if(obj instanceof Integer)
+                    cell.setCellValue((Integer)obj);
+            }
+        }
+	}
+	//make dummy data
+		public TreeMap<String, CF_dto[]> makeDummy(){
+			 Map<String, CF_dto[]> data = new TreeMap<String, CF_dto[]>();
+			//dummy data
+			
+			data.put(new CF_dto("2021-10-12","종류1","123123","112233445","A company",50,0,"11223344"));
+			data.add(new CF_dto("2021-10-12","종류1","123123","112233445","A company",0,50,"11223344"));
+			data.add(new CF_dto("2021-10-14","종류2","321321","123456789","A company",2000,0,"44332211"));
+			data.add(new CF_dto("2021-10-14","종류2","321321","123456789","B company",0,2000,"44332211"));
+			data.add(new CF_dto("2021-10-15","종류1","123123","112233445","A company",30,0,"12312312"));
+			data.add(new CF_dto("2021-10-15","종류1","123123","112233445","A company",0,30,"12312312"));
+			data.add(new CF_dto("2021-10-19","종류1","123123","112233445","A company",90,0,"32132132"));
+			data.add(new CF_dto("2021-10-19","종류1","123123","112233445","A company",0,90,"32132132"));
+			data.add(new CF_dto("2021-10-19","종류1","123123","987654321","D company",900,0,"32132112"));
+			data.add(new CF_dto("2021-10-19","종류1","123123","987654321","D company",0,900,"32132112"));
+			data.add(new CF_dto("2021-10-20","종류2","321321","123456789","B company",8000,0,"32132155"));
+			data.add(new CF_dto("2021-10-20","종류2","321321","123456789","B company",0,8000,"32132155"));
+			data.add(new CF_dto("2021-10-25","종류1","123123","112233445","A company",100,0,"32132166"));
+			data.add(new CF_dto("2021-10-26","종류3","112233","111111111","C company",200,0,"32132177"));
+			data.add(new CF_dto("2021-10-26","종류3","112233","111111111","C company",0,200,"32132177"));
+			data.add(new CF_dto("2021-10-26","종류1","123123","112233445","A company",0,100,"32132166"));
+			data.add(new CF_dto("2021-10-26","종류1","123123","987654321","D company",500,0,"32132188"));
+			data.add(new CF_dto("2021-10-26","종류1","123123","987654321","D company",0,500,"32132188"));
+			data.add(new CF_dto("2021-10-26","종류4","132132","111111111","C company",600,0,"32132199"));
+			data.add(new CF_dto("2021-10-26","종류4","132132","111111111","C company",0,600,"32132199"));
+			data.add(new CF_dto("2021-10-26","종류2","321321","123456789","B company",3000,0,"32132100"));
+			data.add(new CF_dto("2021-10-27","종류2","321321","123456789","B company",0,3000,"32132100"));
+			data.add(new CF_dto("2021-10-29","종류1","123123","112233445","A company",0,0,"11223344"));
+			data.add(new CF_dto("2021-10-29","종류1","123123","112233445","A company",0,0,"11223344"));
+			
+			return data;		
+		}
+	
+	
 	// 경로에 있는 엑셀 파일 읽어오기
 	public JSONArray readExcel(MultipartFile excelFile) {
         JSONArray jsonArray = new JSONArray();
