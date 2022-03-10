@@ -2,8 +2,6 @@ package allbaro.cf.dto;
 
 public class CF_dto {
 
-//	private String inDate;  // 인수 일자
-//	private String outDate; // 재활용 일자
 	private String date;	// 인수/재활용일자
 	private String kinds;	// 폐기물 종류
 	private String kindCode;
@@ -25,22 +23,6 @@ public class CF_dto {
 		this.inAmount = inAmount;
 		this.outAmount = outAmount;
 		this.code = code;
-	}
-
-	public String getInDate() {
-		return inDate;
-	}
-
-	public void setInDate(String inDate) {
-		this.inDate = inDate;
-	}
-
-	public String getOutDate() {
-		return outDate;
-	}
-
-	public void setOutDate(String outDate) {
-		this.outDate = outDate;
 	}
 
 	public String getKinds() {
