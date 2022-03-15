@@ -4,6 +4,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -22,37 +24,34 @@ import allbaro.cf.dto.CF_dto;
 
 public class AllbaroExcelController {
 
-/*	// 추후 수정
-	public void writeDoc() {
-		String tmpDate = "10월";
-		XSSFWorkbook workbook = new XSSFWorkbook();
-
-		// tmpDate로 빈 시트생성
-		XSSFSheet sheet = workbook.createSheet(tmpDate);
-		// data담을 곳
-		Map<String, CF_dto[]> data = makeDummy();
-
-		int rownum = 0;
-		for (String key : data) {
-			Row row = sheet.createRow(rownum++);
-			CF_dto[] objArr = data.get(key);
-			int cellnum = 0;
-			for (Object obj : objArr) {
-				Cell cell = row.createCell(cellnum++);
-				if (obj instanceof String)
-					cell.setCellValue((String) obj);
-				else if (obj instanceof Integer)
-					cell.setCellValue((Integer) obj);
-			}
-		}
+	public void outputExcel(Map<Integer, CF_dto> data) {
+		
 	}
-
+	//
+	public ArrayList<CF_dto> getInputData(ArrayList<CF_dto> all,int flag){
+		//flag로 수집날짜,재활용날짜 data구분 1:수집 0:재활용
+		ArrayList<CF_dto> data = new ArrayList<CF_dto>();
+		
+		switch(flag) {
+		case 1://수집data
+			if(all.get(1).getInAmount()!=0) {
+				data.add(all.get(1));
+			}
+			break;
+		case 2://재활용data
+			if(all.get(1).getOutAmount()!=0) {
+				data.add(all.get(1));
+			}
+			break;
+		}
+		return data;
+	}
+	
 	// make dummy data
-	public TreeMap<String, CF_dto[]> makeDummy() {
-		Map<String, CF_dto[]> data = new TreeMap<String, CF_dto[]>();
+	public ArrayList<CF_dto> makeDummy() {
+		ArrayList<CF_dto> data = new ArrayList<CF_dto>();
 		// dummy data
-
-		data.put(new CF_dto("2021-10-12", "종류1", "123123", "112233445", "A company", 50, 0, "11223344"));
+		data.add(new CF_dto("2021-10-12", "종류1", "123123", "112233445", "A company", 50, 0, "11223344"));
 		data.add(new CF_dto("2021-10-12", "종류1", "123123", "112233445", "A company", 0, 50, "11223344"));
 		data.add(new CF_dto("2021-10-14", "종류2", "321321", "123456789", "A company", 2000, 0, "44332211"));
 		data.add(new CF_dto("2021-10-14", "종류2", "321321", "123456789", "B company", 0, 2000, "44332211"));
@@ -79,7 +78,7 @@ public class AllbaroExcelController {
 
 		return data;
 	}
-	*/
+	
 
 	// 경로에 있는 엑셀 파일 읽어오기
 
