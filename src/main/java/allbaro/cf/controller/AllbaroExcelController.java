@@ -24,21 +24,95 @@ import allbaro.cf.dto.CF_dto;
 
 public class AllbaroExcelController {
 
-	public void outputExcel(Map<Integer, CF_dto> data) {
+	public void outputExcel(ArrayList<CF_dto> data) throws FileNotFoundException, IOException {
+				
+		String path = "C:/Users/chox6/test";
+		String fileName = "test.xlsx";
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		XSSFSheet sheet = workbook.createSheet("dummy");
+		XSSFRow curRow = sheet.createRow(0);
+		XSSFCell cell = curRow.createCell(7);
 		
+		writeHeader("2021년","10월",sheet,curRow,cell);
+		writeDetail(sheet,curRow,cell,data);
+		
+		workbook.write(new FileOutputStream(path + "/" + fileName));
+		workbook = new XSSFWorkbook(path + "/" + fileName);
 	}
-	//
+	//실제 계산값 작성
+	public void writeDetail(XSSFSheet sheet,XSSFRow curRow,XSSFCell cell,ArrayList<CF_dto> data) {
+		/*
+		 *1. 수집,재활용을 기준으로 data를 2개의 컬렉션으로 구분
+		 *2. 인계서일련번호를 기준으로 날짜가 같으면 재활용항목까지 모두 작성
+		 *2-1. 같은날 재활용하지 않았을 시, 재활용컬렉션에 있는 재활용일자 확인 후 작성
+		 *3. 파일로 출력
+		 * */
+		int rowNo = 6;
+		short cellNo = 0;
+		int cnt = 0;
+		Iterator<CF_dto> itr = data.iterator();
+		
+		//while(itr.hasNext()) {
+		curRow = sheet.createRow(rowNo);
+		
+		
+		//날짜작성
+		cell = curRow.createCell(cellNo++);
+		cell.setCellValue(data.get(cnt).getDate());
+		//업소명
+		cell = curRow.createCell(cellNo++);
+		cell.setCellValue(data.get(cnt).getCompanyName());
+		//수집량
+		cell = curRow.createCell(cellNo++);
+		cell.setCellValue(data.get(cnt).getInAmount());
+		//폐기물재활용량
+		cell = curRow.createCell(cellNo++);
+		cell.setCellValue(data.get(cnt).getInAmount());
+		//종류
+		cell = curRow.createCell(cellNo++);
+		cell.setCellValue(data.get(cnt).getKinds());
+		//생산량 = 수집량-수탁물폐기물보관량
+		cell = curRow.createCell(cellNo++);
+		cell.setCellFormula("C"+(rowNo+1)+"-"+"G"+(rowNo+1));
+		//수탁물폐기물보관량
+		cell = curRow.createCell(cellNo++);
+		cell.setCellValue(3);
+		//상호
+		cell = curRow.createCell(cellNo++);
+		cell.setCellValue("C.F");
+		//소재지
+		cell = curRow.createCell(cellNo++);
+		sheet.addMergedRegion(new CellRangeAddress(6, 6, 8, 9));
+		cell.setCellValue("죽산면 걸미로 478-12");
+		//사용용도
+		cell = curRow.createCell(cellNo++);
+		cell.setCellValue(data.get(cnt).getInAmount());
+		//공급량
+		
+		
+		cnt ++;
+		//}
+	}
+
 	public ArrayList<CF_dto> getInputData(ArrayList<CF_dto> all,int flag){
 		//flag로 수집날짜,재활용날짜 data구분 1:수집 0:재활용
-		ArrayList<CF_dto> data = new ArrayList<CF_dto>();
-		
+		ArrayList<CF_dto> data = new ArrayList<CF_dto>();//수집,재활용 dto 구별
+		Iterator<CF_dto> itr = data.iterator();
+		int cnt;
 		switch(flag) {
-		case 1://수집data
-			if(all.get(1).getInAmount()!=0) {
-				data.add(all.get(1));
+		
+		case 1://수집 data
+			cnt=0;
+			while(itr.hasNext()) {
+			if(all.get(cnt).getInAmount()!=0) {
+				data.add(all.get(cnt));
+				
+			}
+			cnt++;
 			}
 			break;
-		case 2://재활용data
+			
+		case 2://재활용 data
 			if(all.get(1).getOutAmount()!=0) {
 				data.add(all.get(1));
 			}
@@ -259,6 +333,7 @@ public class AllbaroExcelController {
 		XSSFSheet sheet = workbook.createSheet("아무거나1");
 		XSSFRow curRow = sheet.createRow(0);
 		XSSFCell cell = curRow.createCell(0);
+		
 		writeHeader("1","1",sheet, curRow,cell);
 
 		workbook.write(new FileOutputStream(path + "/" + fileName));

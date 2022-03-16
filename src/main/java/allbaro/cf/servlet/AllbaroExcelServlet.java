@@ -78,6 +78,7 @@ public class AllbaroExcelServlet extends HttpServlet {
 //		String filesystemName = mrequest.getFilesystemName("excel"); // 기존
 
 		AllbaroExcelController aec = new AllbaroExcelController();
-		aec.makeExcel();
+		//aec.makeExcel();
+		aec.outputExcel(aec.makeDummy());
 		}
 }
