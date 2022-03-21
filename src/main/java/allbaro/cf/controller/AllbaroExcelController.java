@@ -4,11 +4,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -195,15 +199,74 @@ public class AllbaroExcelController {
 	
 	
 	
-	public void writeData(FileInputStream file) {
+	public ArrayList<CF_dto> getData(FileInputStream file) {
+		ArrayList<CF_dto> data = new ArrayList<CF_dto>();
 		try {
-			XSSFWorkbook workbook = new XSSFWorkbook(file);
+//			XSSFWorkbook workbook = new XSSFWorkbook(file);
 			
-			int rowIndex = 0;
-			int cellIndex = 0;
+//			XSSFSheet sheet = workbook.getSheetAt(0); 
+//			int rows = sheet.getPhysicalNumberOfRows();
 			
-			XSSFSheet sheet = workbook.getSheetAt(0); 
-			int rows = sheet.getPhysicalNumberOfRows();
+			
+			 //Create Workbook instance holding reference to .xlsx file
+            XSSFWorkbook workbook = new XSSFWorkbook(file);
+ 
+            //Get first/desired sheet from the workbook
+            XSSFSheet sheet = workbook.getSheetAt(0);
+ 
+            //Iterate through each rows one by one
+            Iterator<Row> rowIterator = sheet.iterator();
+            
+            
+            
+            while (rowIterator.hasNext()) 
+            {
+                Row row = rowIterator.next();
+                //For each row, iterate through all the columns
+                Iterator<Cell> cellIterator = row.cellIterator();
+                 
+                while (cellIterator.hasNext()) 
+                {
+                    Cell cell = cellIterator.next();
+                    
+                    //Check the cell type and format accordingly
+                    switch (cell.getCellType()) 
+                    {
+                        case NUMERIC:
+                        	if (DateUtil.isCellDateFormatted(cell)) {
+                        		Date date = cell.getDateCellValue();
+                        		String cellString = new SimpleDateFormat("yyyy-MM-dd").format(date);
+//                                System.out.println("The cell contains a date value: "
+//                                        + cell.getDateCellValue());
+                        		System.out.print(cellString+"\t");
+                                
+                            }else {
+                            	cell.getNumericCellValue();
+                            	System.out.print(+(long)cell.getNumericCellValue() + "\t");                            	
+                            }
+                            break;
+                        case STRING:
+                            System.out.print(cell.getStringCellValue() + "\t");
+                            break;
+                        case _NONE:
+                        	System.out.print(cell.getStringCellValue() + "\t");
+                        	break;
+                        case BLANK:
+                        	System.out.print(cell.getStringCellValue() + "\t");
+                        	break;
+                        case ERROR:
+                        	System.out.print(cell.getStringCellValue() + "\t");
+                        	break;
+                        case FORMULA:
+                        	System.out.print(cell.getStringCellValue() + "\t");
+                        	break;
+                        
+                    }
+                    
+                }
+                System.out.println("");
+            }
+            file.close();
 			
 			//여기서 부터
 /*	          for(rowindex=0;rowindex<rows;rowindex++){
@@ -249,6 +312,7 @@ public class AllbaroExcelController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return data;
 	}
 
 

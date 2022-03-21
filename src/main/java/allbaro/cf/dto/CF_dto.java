@@ -8,7 +8,7 @@ public class CF_dto {
 	private String companyNo;// 위탁업체 식별번호
 	private String companyName;// 위탁업소
 	private int inAmount;// 수집량
-	private int outAmount;// 재활용량
+	private int outAmount;// 폐기물 재활용량
 	private String code; // 인계서 일련번호
 
 	public CF_dto(String date, String kinds, String kindCode, String companyNo, String companyName, int inAmount,

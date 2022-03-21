@@ -1,6 +1,7 @@
 package allbaro.cf.servlet;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -78,6 +79,7 @@ public class AllbaroExcelServlet extends HttpServlet {
 //		String filesystemName = mrequest.getFilesystemName("excel"); // 기존
 
 		AllbaroExcelController aec = new AllbaroExcelController();
-		aec.makeExcel();
+		aec.getData(new FileInputStream("C:/Users/chox6/OneDrive/바탕 화면/allbaro/Excel (3).xlsx"));
+//		aec.makeExcel();
 		}
 }
