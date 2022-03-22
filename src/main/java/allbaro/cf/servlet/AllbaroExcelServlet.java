@@ -79,12 +79,12 @@ public class AllbaroExcelServlet extends HttpServlet {
 //		String filesystemName = mrequest.getFilesystemName("excel"); // 기존
 
 		AllbaroExcelController aec = new AllbaroExcelController();
-<<<<<<< HEAD
-		aec.getData(new FileInputStream("C:/Users/chox6/OneDrive/바탕 화면/allbaro/Excel (3).xlsx"));
-//		aec.makeExcel();
-=======
+
+//		aec.getData(new FileInputStream("C:/Users/chox6/OneDrive/바탕 화면/allbaro/Excel (3).xlsx"));
+
+
 		//aec.makeExcel();
-		aec.outputExcel(aec.makeDummy());
->>>>>>> cda3ba938de11401b2ce4ea81065b08278878974
+			aec.outputExcel(aec.makeDummy());
+
 		}
 }
