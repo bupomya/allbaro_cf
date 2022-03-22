@@ -80,8 +80,8 @@ public class AllbaroExcelServlet extends HttpServlet {
 
 		AllbaroExcelController aec = new AllbaroExcelController();
 
-		aec.getData(new FileInputStream("C:/Users/chox6/OneDrive/바탕 화면/allbaro/Excel (3).xlsx"));
-		aec.outputExcel(aec.makeDummy());
+		//aec.getData(new FileInputStream("C:/Users/chox6/OneDrive/바탕 화면/allbaro/Excel (3).xlsx"));
+		
 
 		//aec.makeExcel();
 	
