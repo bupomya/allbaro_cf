@@ -44,7 +44,7 @@ public class AllbaroExcelController {
 		workbook = new XSSFWorkbook(path + "/" + fileName);
 	}
 	//실제 계산값 작성
-	public void writeDetail(XSSFSheet sheet,XSSFRow curRow,XSSFCell cell,ArrayList<CF_dto> data1) {
+	public void writeDetail(XSSFSheet sheet,XSSFRow curRow,XSSFCell cell,ArrayList<CF_dto> bData) {
 		/*
 		 *1. 수집,재활용을 기준으로 data를 2개의 컬렉션으로 구분
 		 *2. 인계서일련번호를 기준으로 날짜가 같으면 재활용항목까지 모두 작성
@@ -52,81 +52,92 @@ public class AllbaroExcelController {
 		 *3. 파일로 출력
 		 * */
 		ArrayList<CF_dto> data = new ArrayList<>();
-		data = getInputData(data1,1);
+		data = getInputData(bData,0);//0:수집 1:재활용
 		int rowNo = 6;
 		
 		//int cnt = 0;
 		Iterator<CF_dto> itr = data.iterator();
 		
-		//while(itr.hasNext()) {
 		for(int cnt=0;cnt<data.size();cnt++) {
-		short cellNo=0;
+			short cellNo=0;
 			
 		curRow = sheet.createRow(rowNo);	
 		//날짜작성
 		cell = curRow.createCell(cellNo++);
 		cell.setCellValue(data.get(cnt).getDate());
+		
 		//업소명
 		cell = curRow.createCell(cellNo++);
 		cell.setCellValue(data.get(cnt).getCompanyName());
+
 		//수집량
 		cell = curRow.createCell(cellNo++);
 		cell.setCellValue(data.get(cnt).getInAmount());
+		
 		//폐기물재활용량
 		cell = curRow.createCell(cellNo++);
 		cell.setCellValue(data.get(cnt).getInAmount());
+		
 		//종류
 		cell = curRow.createCell(cellNo++);
 		cell.setCellValue(data.get(cnt).getKinds());
+		
 		//생산량 = 수집량-수탁물폐기물보관량
 		cell = curRow.createCell(cellNo++);
 		cell.setCellFormula("C"+(rowNo+1)+"-"+"G"+(rowNo+1));
+		
 		//수탁물폐기물보관량
 		cell = curRow.createCell(cellNo++);
-		cell.setCellValue(3);
+		cell.setCellValue(1);
+		
 		//상호
 		cell = curRow.createCell(cellNo++);
 		cell.setCellValue("C.F");
+		
 		//소재지
 		cell = curRow.createCell(cellNo++);
 		sheet.addMergedRegion(new CellRangeAddress(rowNo, rowNo, 8, 9));
 		cell.setCellValue("죽산면 걸미로 478-12");
+		
 		//사용용도
 		cell = curRow.createCell(++cellNo);
 		cell.setCellValue("재활용");
+		
 		//공급량
 		cell = curRow.createCell(++cellNo);
 		cell.setCellValue(data.get(cnt).getOutAmount());
 		
 		rowNo++;
-		
-		}
+			}
 	}
 
-	public ArrayList<CF_dto> getInputData(ArrayList<CF_dto> all,int flag){
-		//flag로 수집날짜,재활용날짜 data구분 1:수집 0:재활용
+	public ArrayList<CF_dto> getInputData(ArrayList<CF_dto> bData,int flag){
+		//flag로 수집날짜,재활용날짜 data구분 0:수집 1:재활용
 		ArrayList<CF_dto> data = new ArrayList<CF_dto>();//수집,재활용 dto 구별
-		Iterator<CF_dto> itr = data.iterator();
-		int cnt=0;
-		switch(flag) {
 		
-		case 1://수집 data
+		
+			switch(flag) {
+			case 0:
+				for(int i=0;i<bData.size();i++) {
+					if(bData.get(i).getOutAmount()==0){
+						data.add(bData.get(i));
+					}
+				}
+				break;
 			
-			while(itr.hasNext()) {
-			if(all.get(cnt).getInAmount()!=0) {
-				data.add(all.get(cnt));
-				
-			}
-			cnt++;
-			}
-			break;
+			case 1:
+				for(int i=0;i<bData.size();i++) {
+					if(bData.get(i).getInAmount()==0) {
+						data.add(bData.get(i));
+					}
+				}
 			
-		case 2://재활용 data
-			if(all.get(cnt).getOutAmount()!=0) {
-				data.add(all.get(cnt));
 			}
-			break;
+		
+		for(int i=0;i<data.size();i++) {
+			System.out.println(data.get(i).toString());
 		}
+		
 		return data;
 	}
 	

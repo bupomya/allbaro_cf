@@ -87,4 +87,11 @@ public class CF_dto {
 		this.code = code;
 	}
 
+	@Override
+	public String toString() {
+		return "CF_dto [date=" + date + ", kinds=" + kinds + ", kindCode=" + kindCode + ", companyNo=" + companyNo
+				+ ", companyName=" + companyName + ", inAmount=" + inAmount + ", outAmount=" + outAmount + ", code="
+				+ code + "]";
+	}
+
 }

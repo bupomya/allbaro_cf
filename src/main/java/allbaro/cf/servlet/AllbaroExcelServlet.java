@@ -84,7 +84,10 @@ public class AllbaroExcelServlet extends HttpServlet {
 		aec.outputExcel(aec.makeDummy());
 
 		//aec.makeExcel();
-			
+	
+		
+			aec.outputExcel(aec.makeDummy());
+
 
 		}
 }
