@@ -30,7 +30,7 @@ public class AllbaroExcelController {
 
 	public void outputExcel(ArrayList<CF_dto> data) throws FileNotFoundException, IOException {
 
-		String path = "C:/Users/chox6/test";
+		String path = "C:/Users/chox6/OneDrive/바탕 화면//새 폴더";
 		String fileName = "test.xlsx";
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		XSSFSheet sheet = workbook.createSheet("dummy");
@@ -50,36 +50,39 @@ public class AllbaroExcelController {
 		 * 1. 수집,재활용을 기준으로 data를 2개의 컬렉션으로 구분 2. 인계서일련번호를 기준으로 날짜가 같으면 재활용항목까지 모두 작성
 		 * 2-1. 같은날 재활용하지 않았을 시, 재활용컬렉션에 있는 재활용일자 확인 후 작성 3. 파일로 출력
 		 */
-		ArrayList<CF_dto> data = new ArrayList<>();
-		data = getInputData(bData, 0);// 0:수집 1:재활용
+		ArrayList<CF_dto> inData = new ArrayList<>();
+		ArrayList<CF_dto> outData = new ArrayList<>();
+		// 0:수집 1:재활용
+		inData = getInputData(bData, 0);	//수집 데이터
+		outData = getInputData(bData, 1);	//재활용 데이터
 		int rowNo = 6;
-
-		// int cnt = 0;
-		Iterator<CF_dto> itr = data.iterator();
-
-		for (int cnt = 0; cnt < data.size(); cnt++) {
+		
+		for (int cnt = 0; cnt < inData.size(); cnt++) {
 			short cellNo = 0;
-
+			
+			for(int outCnt=0; outCnt<outData.size();outCnt++) {
+				if(inData.get(cnt).getCode()==outData.get(outCnt).getCode()) {//인계서번호로 확인
+					if(inData.get(cnt).getDate()==outData.get(outCnt).getDate()) {//날짜 확인
 			curRow = sheet.createRow(rowNo);
 			// 날짜작성
 			cell = curRow.createCell(cellNo++);
-			cell.setCellValue(data.get(cnt).getDate());
+			cell.setCellValue(inData.get(cnt).getDate());
 
 			// 업소명
 			cell = curRow.createCell(cellNo++);
-			cell.setCellValue(data.get(cnt).getCompanyName());
+			cell.setCellValue(inData.get(cnt).getCompanyName());
 
 			// 수집량
 			cell = curRow.createCell(cellNo++);
-			cell.setCellValue(data.get(cnt).getInAmount());
+			cell.setCellValue(inData.get(cnt).getInAmount());
 
 			// 폐기물재활용량
 			cell = curRow.createCell(cellNo++);
-			cell.setCellValue(data.get(cnt).getInAmount());
+			cell.setCellValue(inData.get(cnt).getInAmount());
 
 			// 종류
 			cell = curRow.createCell(cellNo++);
-			cell.setCellValue(data.get(cnt).getKinds());
+			cell.setCellValue(inData.get(cnt).getKinds());
 
 			// 생산량 = 수집량-수탁물폐기물보관량
 			cell = curRow.createCell(cellNo++);
@@ -101,11 +104,25 @@ public class AllbaroExcelController {
 			// 사용용도
 			cell = curRow.createCell(++cellNo);
 			cell.setCellValue("재활용");
-
+			
 			// 공급량
 			cell = curRow.createCell(++cellNo);
-			cell.setCellValue(data.get(cnt).getOutAmount());
-
+			
+					if(inData.get(cnt).getInAmount()==outData.get(outCnt).getOutAmount()) {//수량확인
+					cell.setCellFormula(outData.get(outCnt).getOutAmount() + "-" + "G" + (rowNo + 1));
+						break;
+					}else { //보관량
+						cell.setCellFormula(outData.get(outCnt).getOutAmount() + "-" + "G" + (rowNo + 1));
+						
+						cell = curRow.createCell(++cellNo);
+						
+						cell.setCellFormula(inData.get(cnt).getInAmount() + "-" + outData.get(outCnt).getOutAmount());
+						break;
+					}
+				}
+			}
+			}// end for statement
+			
 			rowNo++;
 		}
 	}
@@ -144,7 +161,7 @@ public class AllbaroExcelController {
 		ArrayList<CF_dto> data = new ArrayList<CF_dto>();
 		// dummy data
 		data.add(new CF_dto("2021-10-12", "종류1", "123123", "112233445", "A company", 50, 0, "11223344"));
-		data.add(new CF_dto("2021-10-12", "종류1", "123123", "112233445", "A company", 0, 50, "11223344"));
+		data.add(new CF_dto("2021-10-12", "종류1", "123123", "112233445", "A company", 0, 30, "11223344"));
 		data.add(new CF_dto("2021-10-14", "종류2", "321321", "123456789", "A company", 2000, 0, "44332211"));
 		data.add(new CF_dto("2021-10-14", "종류2", "321321", "123456789", "B company", 0, 2000, "44332211"));
 		data.add(new CF_dto("2021-10-15", "종류1", "123123", "112233445", "A company", 30, 0, "12312312"));
@@ -165,8 +182,8 @@ public class AllbaroExcelController {
 		data.add(new CF_dto("2021-10-26", "종류4", "132132", "111111111", "C company", 0, 600, "32132199"));
 		data.add(new CF_dto("2021-10-26", "종류2", "321321", "123456789", "B company", 3000, 0, "32132100"));
 		data.add(new CF_dto("2021-10-27", "종류2", "321321", "123456789", "B company", 0, 3000, "32132100"));
-		data.add(new CF_dto("2021-10-29", "종류1", "123123", "112233445", "A company", 0, 0, "11223344"));
-		data.add(new CF_dto("2021-10-29", "종류1", "123123", "112233445", "A company", 0, 0, "11223344"));
+		data.add(new CF_dto("2021-10-29", "종류1", "123123", "112233445", "A company", 50, 0, "11223344"));
+		data.add(new CF_dto("2021-10-29", "종류1", "123123", "112233445", "A company", 0, 50, "11223344"));
 
 		return data;
 	}
