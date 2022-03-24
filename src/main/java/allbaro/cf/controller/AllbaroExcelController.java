@@ -304,6 +304,8 @@ public class AllbaroExcelController {
 
 	public ArrayList<CF_dto> getData(FileInputStream file) {
 		ArrayList<CF_dto> data = new ArrayList<CF_dto>();
+		int rowIdx = 0;
+		int sheetIdx = 0;
 		try {
 //			XSSFWorkbook workbook = new XSSFWorkbook(file);
 
@@ -314,7 +316,7 @@ public class AllbaroExcelController {
 			XSSFWorkbook workbook = new XSSFWorkbook(file);
 
 			// Get first/desired sheet from the workbook
-			XSSFSheet sheet = workbook.getSheetAt(0);
+			XSSFSheet sheet = workbook.getSheetAt(sheetIdx);
 
 			// Iterate through each rows one by one
 			Iterator<Row> rowIterator = sheet.iterator();
@@ -324,53 +326,76 @@ public class AllbaroExcelController {
 				// For each row, iterate through all the columns
 				Iterator<Cell> cellIterator = row.cellIterator();
 
-				while (cellIterator.hasNext()) {
-					Cell cell = cellIterator.next();
-
-					// Check the cell type and format accordingly
-					switch (cell.getCellType())
-
-					{
-					case NUMERIC:
-						if (DateUtil.isCellDateFormatted(cell)) {
-							Date date = cell.getDateCellValue();
-							String cellString = new SimpleDateFormat("yyyy-MM-dd").format(date);
-//                                System.out.println("The cell contains a date value: "
-//                                        + cell.getDateCellValue());
-							System.out.print(cellString + "\t");
-
-						} else {
-							cell.getNumericCellValue();
-							System.out.print(+(long) cell.getNumericCellValue() + "\t");
-						}
-						break;
-					case STRING:
-						System.out.print(cell.getStringCellValue() + "\t");
-						break;
-					case _NONE:
-						System.out.print(cell.getStringCellValue() + "\t");
-						break;
-					case BLANK:
-						System.out.print(cell.getStringCellValue() + "\t");
-						break;
-					case ERROR:
-						System.out.print(cell.getStringCellValue() + "\t");
-						break;
-					case FORMULA:
-						System.out.print(cell.getStringCellValue() + "\t");
-						break;
-					}
-				} // while
+//				while (cellIterator.hasNext()) {
+//					Cell cell = cellIterator.next();
+//
+//					// Check the cell type and format accordingly
+//					switch (cell.getCellType())
+//
+//					{
+//					case NUMERIC:
+//						if (DateUtil.isCellDateFormatted(cell)) {
+//							Date date = cell.getDateCellValue();
+//							String cellString = new SimpleDateFormat("yyyy-MM-dd").format(date);
+////                                System.out.println("The cell contains a date value: "
+////                                        + cell.getDateCellValue());
+//							System.out.print(cellString + "\t");
+//
+//						} else {
+//							cell.getNumericCellValue();
+//							System.out.print(+(long) cell.getNumericCellValue() + "\t");
+//						}
+//						break;
+//					case STRING:
+//						System.out.print(cell.getStringCellValue() + "\t");
+//						break;
+//					case _NONE:
+//						System.out.print(cell.getStringCellValue() + "\t");
+//						break;
+//					case BLANK:
+//						System.out.print(cell.getStringCellValue() + "\t");
+//						break;
+//					case ERROR:
+//						System.out.print(cell.getStringCellValue() + "\t");
+//						break;
+//					case FORMULA:
+//						System.out.print(cell.getStringCellValue() + "\t");
+//						break;
+//					}
+//				} // while
+				inputData(workbook,sheet,rowIdx,data);
+				rowIdx++;
 				System.out.println("");
 			} // while
+			sheetIdx++;
 			file.close();
-
+			
+			for (int i = 0; i < data.size(); i++) {
+				System.out.println(data.get(i));
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return data;
-	}
+	}//getData
+	
+	public ArrayList<CF_dto> inputData(XSSFWorkbook workbook, XSSFSheet sheet , int rowIdx, ArrayList<CF_dto> data) {
+		XSSFRow row = sheet.getRow(rowIdx);
+		XSSFCell cell = row.getCell(0);
+		
+		String date = String.format("",row.getCell(3)); // 인수/재활용일자
+		String kinds = String.format("", row.getCell(4)); // 폐기물 종류
+		String kindCode = String.format("",row.getCell(5));//폐기물코드
+		String companyNo = String.format("", row.getCell(7));//위탁업체 식별번호
+		String companyName = String.format("",row.getCell(8));//위탁업소
+		int inAmount = Integer.parseInt(String.format("", row.getCell(9)));//수집량
+		int outAmount = Integer.parseInt(String.format("", row.getCell(12)));//폐기물 재활용량
+		String code = String.format("", row.getCell(14));
+		
+		data.add(new CF_dto(date,kinds,kindCode,companyNo,companyName,inAmount,outAmount,code));
+		return data;
+	}//inputData
 
 	public XSSFWorkbook makeExcel() throws FileNotFoundException, IOException {
 		String path = "C:/Users/chox6/test";
