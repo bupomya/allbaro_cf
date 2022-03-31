@@ -58,11 +58,11 @@ public class AllbaroExcelController {
 		int rowNo = 6;
 		
 		for (int cnt = 0; cnt < inData.size(); cnt++) {
-			short cellNo = 0;
+			
 			
 			for(int outCnt=0; outCnt<outData.size();outCnt++) {
 				if(inData.get(cnt).getCode()==outData.get(outCnt).getCode()) {//인계서번호로 확인
-					if(inData.get(cnt).getDate()==outData.get(outCnt).getDate()) {//날짜 확인
+					short cellNo = 0;		
 			curRow = sheet.createRow(rowNo);
 			// 날짜작성
 			cell = curRow.createCell(cellNo++);
@@ -91,7 +91,7 @@ public class AllbaroExcelController {
 			// 수탁물폐기물보관량
 			cell = curRow.createCell(cellNo++);
 			cell.setCellValue(1);
-
+			if(inData.get(cnt).getDate()==outData.get(outCnt).getDate()) {//날짜 확인
 			// 상호
 			cell = curRow.createCell(cellNo++);
 			cell.setCellValue("C.F");
