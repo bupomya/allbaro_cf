@@ -3,6 +3,7 @@ package allbaro.cf.servlet;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -80,13 +81,42 @@ public class AllbaroExcelServlet extends HttpServlet {
 
 		AllbaroExcelController aec = new AllbaroExcelController();
 
-		//aec.getData(new FileInputStream("C:/Users/chox6/OneDrive/바탕 화면/allbaro/Excel (3).xlsx"));
+//		aec.getData(new FileInputStream("C:/Users/chox6/OneDrive/바탕 화면/allbaro/Excel (3).xlsx"));
 		
 
-		//aec.makeExcel();
-	
+//		aec.makeExcel();
 		
-			aec.outputExcel(aec.makeDummy());
+		// https://dev-gorany.tistory.com/289
+		//UploadUtil uploadUtil = UploadUtil.create(request.getServletContext());
+		
+		//List<Part> parts = (List<Part>) request.getParts();
+//		Part part = request.getPart(getServletName());
+		
+//		for(Part part : parts) {
+//			if(!part.getName().equals("excel")) continue;// excel로 들어온 part가 아니면 스킵
+//			if(part.getSubmittedFileName().equals(""))continue; // 업로드된 파일 이름이 없으면 스킵
+//			
+//			String fileName = part.getSubmittedFileName();
+//			
+//			uploadUtil.saveFiles(part, "");
+//			
+//		}
+		
+		ServletContext context = request.getSession().getServletContext();
+		String realPath = context.getRealPath("/excel");
+		int maxSize = 1024*1024*30;
+		
+		MultipartRequest multi = new MultipartRequest(request, realPath, maxSize, "utf-8",new DefaultFileRenamePolicy());
+		String fileName = multi.getFilesystemName("excel");
+		String originalName = multi.getOriginalFileName("excel");
+		String type = multi.getContentType("excel");
+		File file = multi.getFile("excel");
+		
+		System.out.println(file.getName());
+		System.out.println(file.getAbsolutePath());
+		System.out.println(file.length());
+		
+		aec.outputExcel(aec.getData(file,realPath));
 
 
 		}

@@ -1,5 +1,6 @@
 package allbaro.cf.controller;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -302,9 +303,16 @@ public class AllbaroExcelController {
 
 	}// writeHeader
 
-	public ArrayList<CF_dto> getData(FileInputStream file) {
+	public ArrayList<CF_dto> getData(File excelFile,String pathName) {
+		FileInputStream file = null;
+		try {
+			file = new FileInputStream(excelFile);
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		ArrayList<CF_dto> data = new ArrayList<CF_dto>();
-		int rowIdx = 0;
+		int rowIdx = 6;
 		int sheetIdx = 0;
 		try {
 //			XSSFWorkbook workbook = new XSSFWorkbook(file);
@@ -371,7 +379,8 @@ public class AllbaroExcelController {
 			file.close();
 			
 			for (int i = 0; i < data.size(); i++) {
-				System.out.println(data.get(i));
+//				System.out.println(data.get(i));
+				System.out.println("asdf");
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -389,9 +398,9 @@ public class AllbaroExcelController {
 		String kindCode = String.format("",row.getCell(5));//폐기물코드
 		String companyNo = String.format("", row.getCell(7));//위탁업체 식별번호
 		String companyName = String.format("",row.getCell(8));//위탁업소
-		int inAmount = Integer.parseInt(String.format("", row.getCell(9)));//수집량
-		int outAmount = Integer.parseInt(String.format("", row.getCell(12)));//폐기물 재활용량
-		String code = String.format("", row.getCell(14));
+		int inAmount = Integer.parseInt(String.format("%s",row.getCell(9)));//수집량
+		int outAmount = Integer.parseInt(String.format("%s", row.getCell(12)));//폐기물 재활용량
+		String code = String.format("", row.getCell(14));//인계서 일련번호
 		
 		data.add(new CF_dto(date,kinds,kindCode,companyNo,companyName,inAmount,outAmount,code));
 		return data;
